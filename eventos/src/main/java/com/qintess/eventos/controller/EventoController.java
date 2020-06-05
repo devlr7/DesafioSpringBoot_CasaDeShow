@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +23,7 @@ import com.qintess.eventos.repositorys.EventoRepository;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("http://localhost:4200")
 public class EventoController {
 	
 	@Autowired
@@ -62,21 +63,21 @@ public class EventoController {
 	}
 
 	@DeleteMapping("/evento/{id}")
-	public ResponseEntity<String> deleteEvento(@PathVariable(name = "id") int id) {
+	public List<Evento> deleteEvento(@PathVariable(name = "id") int id) {
 		
 		eventoRpo.deleteById(id);
 		
-		return ResponseEntity.ok("Cliente deletado com sucesso !");
+		return eventoRpo.findAll();
 	}	
 	
 	@PutMapping("/evento/{id}")	
-	public ResponseEntity<String> putEvento(@PathVariable(name = "id") int id,
+	public Evento putEvento(@PathVariable(name = "id") int id,
 								@RequestBody Evento evento) {
 		
 		eventoRpo.findById(id);
-		eventoRpo.save(evento);
 		
-		return ResponseEntity.ok("Evento atualizado com sucesso !");
+		
+		return eventoRpo.save(evento);
 	
 	}
 	
