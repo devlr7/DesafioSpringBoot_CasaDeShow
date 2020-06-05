@@ -3,7 +3,7 @@ package com.qintess.eventos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +18,7 @@ import com.qintess.eventos.repositorys.UsuarioRepository;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("http://localhost:4200")
 public class UsuarioController {
 	
 	@Autowired
@@ -50,22 +51,21 @@ public class UsuarioController {
 	
 	
 	@DeleteMapping("/usuario/{id}")
-	public ResponseEntity<String> delete(@PathVariable(name = "id") int id) {
+	public List<Usuario> delete(@PathVariable(name = "id") int id) {
 		
 		usuarioRpo.deleteById(id);
 		
-		return ResponseEntity.ok("Cliente deletado com sucesso !");
+		return usuarioRpo.findAll();
 	}	
 	
 	
 	@PutMapping("/usuario/{id}")	
-	public ResponseEntity<String> update(@PathVariable(name = "id") int id,
+	public Usuario update(@PathVariable(name = "id") int id, 
 								@RequestBody Usuario usuario) {
 		
 		usuarioRpo.findById(id);
-		usuarioRpo.save(usuario);
 		
-		return ResponseEntity.ok("Cliente atualizado com sucesso !");
+		return usuarioRpo.save(usuario);
 	
 	}
 	
