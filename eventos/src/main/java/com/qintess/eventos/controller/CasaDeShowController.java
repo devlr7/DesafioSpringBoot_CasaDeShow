@@ -3,7 +3,7 @@ package com.qintess.eventos.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +18,7 @@ import com.qintess.eventos.repositorys.CasaDeShowRepository;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("http://localhost:4200")
 public class CasaDeShowController {
 	
 	@Autowired
@@ -32,7 +33,7 @@ public class CasaDeShowController {
 	}
 	
 	@GetMapping("/casadeshow/{id}")
-	public ResponseEntity<CasaDeShow> getCasaId(@PathVariable(name = "id") int id) throws Exception {
+	public List<CasaDeShow> getCasaId(@PathVariable(name = "id") int id) throws Exception {
 		
 		
 		try {
@@ -45,7 +46,7 @@ public class CasaDeShowController {
 				
 			} else {
 				
-				return ResponseEntity.ok(casadeshow);
+				return casadeshowRpo.findAll();
 			}
 			
 		} catch (NoSuchElementException e) {
@@ -65,23 +66,23 @@ public class CasaDeShowController {
 	
 	
 	@DeleteMapping("/casadeshow/{id}")
-	public ResponseEntity<String> deleteCasa(@PathVariable(name = "id") int id) {
+	public List<CasaDeShow> deleteCasa(@PathVariable(name = "id") int id) {
 		
 		casadeshowRpo.deleteById(id);
 		
-		return ResponseEntity.ok("Casa de Show deletada com sucesso !");
+		return casadeshowRpo.findAll();
 	}	
 	
 	
 	@PutMapping("/casadeshow/{id}")	
-	public ResponseEntity<String> putCasa(@PathVariable(name = "id") int id,
+	public List<CasaDeShow> putCasa(@PathVariable(name = "id") int id,
 								@RequestBody CasaDeShow casadeshow) {
 		
 		casadeshowRpo.findById(id);
 		
 		casadeshowRpo.save(casadeshow);
 		
-		return ResponseEntity.ok("Atualizado Casa de Show com sucesso");
+		return casadeshowRpo.findAll();
 	
 	}
 
